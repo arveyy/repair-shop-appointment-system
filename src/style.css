@@ -157,15 +157,15 @@ li {
 .how-it-works-image-container {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 40px;
+    gap: 80px;
     max-width: 1100px;
-    margin: 60px auto;
+    margin: 200px auto;
     text-align: center;
 }
 
 .how-it-works-image-container img {
-    width: 80px;
-    height: 80px;
+    width: 120px;
+    height: 120px;
     object-fit: contain;
     border-radius: 0;
     margin: 0 auto;
@@ -214,7 +214,7 @@ li {
 
 .drop-off-images {
     display: flex;
-    gap: 20px;
+    gap: 100px;
     justify-content: flex-end;
     margin-left: auto;
 }
@@ -282,4 +282,106 @@ li {
     width: 100% !important;
     padding: 0 !important;
     font-size: 15px !important;
+}
+
+.track-repair {
+    text-align: center;
+    margin: 100px auto;
+    max-width: 700px;
+    padding: 0 20px;
+}
+
+.track-repair h2 {
+    font-family: 'Crimson Text', serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 500;
+    color: #000000;
+    margin: 0 0 12px 0;
+}
+
+.track-subtitle {
+    font-family: 'DM Sans', sans-serif !important;
+    font-size: 16px !important;
+    font-weight: 400 !important;
+    color: #555 !important;
+    margin: 0 0 30px 0 !important;
+    width: 100% !important;
+    text-align: center !important;
+}
+
+.track-input-container {
+    display: flex;
+    align-items: center;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 6px 6px 6px 16px;
+    gap: 10px;
+    margin-bottom: 16px;
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.track-input-container:hover {
+    box-shadow: 0 0 20px rgba(0, 197, 255, 0.3), 0 0 60px rgba(0, 150, 255, 0.15);
+    border-color: #ccc;
+}
+
+.track-input-container:focus-within {
+    border-color: #00C5FF;
+    box-shadow: 0 0 20px rgba(0, 197, 255, 0.3), 0 0 60px rgba(0, 150, 255, 0.15);
+}
+
+.track-icon {
+    font-size: 18px;
+    color: #aaa;
+    flex-shrink: 0;
+}
+
+.track-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    color: #333;
+    background: transparent;
+}
+
+.track-input::placeholder {
+    color: #aaa;
+}
+
+.track-btn {
+    background-color: #00C5FF;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 14px 28px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    flex-shrink: 0;
+}
+
+.track-btn:hover {
+    background-color: #004782;
+}
+
+.track-hint {
+    font-family: 'DM Sans', sans-serif !important;
+    font-size: 14px !important;
+    font-weight: 400 !important;
+    color: #777 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    text-align: center !important;
+}
+
+.track-icon-img {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    flex-shrink: 0;
 }
