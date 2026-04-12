@@ -386,3 +386,54 @@ li {
     flex-shrink: 0;
 }
 
+/*TABLET*/
+@media (max-width: 1024px) {
+    .navbar-logo-img { height: 80px; }
+    .navbar-menu li a { font-size: 15px; padding: 10px 10px; }
+    .how-it-works-image-container { gap: 32px; margin: 100px auto; }
+    .drop-off-device { margin: 100px 40px; gap: 40px; }
+    .drop-off-device p { width: 100%; }
+    .drop-off-images { gap: 20px; }
+    .branch-card { width: 280px; height: 360px; }
+    .hero-section > p { font-size: 28px; margin: 60px 15px 100px 15px; }
+}
+
+/*TABLET PORTRAIT*/
+@media (max-width: 768px) {
+    .navbar-logo-img { height: 60px; }
+    .navbar-menu { position: static; transform: none; left: auto; flex-wrap: wrap; justify-content: center; }
+    .navbar-menu li a { font-size: 13px; padding: 8px 8px; }
+    .navbar-container { flex-wrap: wrap; justify-content: center; gap: 8px; }
+    .how-it-works-image-container { grid-template-columns: repeat(2, 1fr); gap: 40px; margin: 60px auto; }
+    .drop-off-device { flex-direction: column; margin: 60px 20px; }
+    .drop-off-text { text-align: center; }
+    .drop-off-images { flex-direction: column; align-items: center; gap: 20px; margin-left: 0; }
+    .branch-card { width: 100%; max-width: 400px; height: 280px; }
+    .drop-off-device p { width: 100%; font-size: 16px; }
+    .hero-section > p { font-size: 22px; margin: 40px 15px 60px 15px; }
+    .carousel-slide { width: 260px; height: 180px; }
+    .how-it-works-image-container img { width: 80px; height: 80px; }
+    .track-repair { margin: 40px auto; }
+    .navbar.scrolled { top: 8px; margin: 8px 12px; }
+}
+
+/*MOBILE*/
+@media (max-width: 480px) {
+    .navbar-menu li a { font-size: 12px; padding: 6px 6px; }
+    .how-it-works-image-container { grid-template-columns: repeat(2, 1fr); gap: 24px; padding: 0 16px; }
+    .how-it-works-image-container img { width: 60px; height: 60px; }
+    .how-it-works-image-container h3 { font-size: 16px; }
+    .how-it-works-image-container p { font-size: 13px; }
+    .branch-card { height: 220px; }
+    .hero-section > p { font-size: 18px; }
+    .track-input-container { flex-wrap: wrap; }
+    .track-btn { width: 100%; }
+    .carousel-slide { width: 200px; height: 140px; }
+    .drop-off-device { margin: 40px 16px; }
+}
+
+/*SMALL MOBILE*/
+@media (max-width: 360px) {
+    .how-it-works-image-container { grid-template-columns: 1fr; }
+    .navbar-menu li a { font-size: 11px; padding: 5px 5px; }
+}
