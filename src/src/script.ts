@@ -1,3 +1,4 @@
+export {};
 const navbar = document.querySelector<HTMLElement>('.navbar');
 
 window.addEventListener('scroll', (): void => {

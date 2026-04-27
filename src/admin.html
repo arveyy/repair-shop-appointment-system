@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=Crimson+Text:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <title>QueueTech Admin</title>
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+    <!-- ── SIDEBAR ── -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <img src="images/logo.png" alt="QueueTech" class="sidebar-logo-img">
+            <span class="sidebar-logo-text">Tim'Solutions</span>
+        </div>
+
+        <div class="sidebar-search">
+            <span class="search-icon">⌕</span>
+            <input type="text" id="sidebarSearch" placeholder="Search...">
+            <span class="search-shortcut">⌘K</span>
+        </div>
+
+        <nav class="sidebar-nav" id="sidebarNav">
+            <!-- Populated by JS based on role -->
+        </nav>
+
+        <div class="sidebar-user" id="sidebarUser">
+            <div class="user-avatar" id="userAvatar">--</div>
+            <div class="user-info">
+                <span class="user-name" id="userName">Loading...</span>
+                <span class="user-role" id="userRoleBadge">—</span>
+            </div>
+            <button class="logout-btn" id="logoutBtn" title="Logout">⏻</button>
+        </div>
+    </aside>
+
+    <!-- ── MAIN ── -->
+    <main class="main-content" id="mainContent">
+
+        <!-- Topbar -->
+        <div class="topbar">
+            <div class="topbar-left">
+                <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+                <span class="topbar-icon" id="topbarIcon">⊞</span>
+                <h1 class="topbar-title" id="topbarTitle">Dashboard</h1>
+            </div>
+            <div class="topbar-right">
+                <button class="theme-toggle" id="themeToggle">
+                    <span id="toggleIcon">⚡</span>
+                    <span id="toggleText">Neon</span>
+                </button>
+                <!-- Only shown for cashier/owner -->
+                <button class="open-pos-btn role-cashier role-owner" id="openPosBtn">⊟ Open POS</button>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════
+             DASHBOARD (Owner + Cashier)
+        ══════════════════════════════ -->
+        <div class="page active" id="page-dashboard">
+            <div class="stats-grid" id="statsGrid">
+                <div class="stat-card">
+                    <div class="stat-header"><div class="stat-icon">₱</div><span class="stat-label">TODAY'S SALES</span></div>
+                    <div class="stat-value" id="statTodaySales">—</div>
+                    <div class="stat-empty">No data yet</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header"><div class="stat-icon">≡</div><span class="stat-label">TRANSACTIONS</span></div>
+                    <div class="stat-value" id="statTransactions">—</div>
+                    <div class="stat-empty">No data yet</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header"><div class="stat-icon">▦</div><span class="stat-label">THIS WEEK</span></div>
+                    <div class="stat-value" id="statWeek">—</div>
+                    <div class="stat-empty">No data yet</div>
+                </div>
+                <div class="stat-card role-owner">
+                    <div class="stat-header"><div class="stat-icon">↗</div><span class="stat-label">THIS MONTH</span></div>
+                    <div class="stat-value" id="statMonth">—</div>
+                    <div class="stat-empty">No data yet</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header"><span class="section-icon">⚡</span><h2>Quick Actions</h2></div>
+                <div class="quick-actions-grid" id="quickActionsGrid">
+                    <button class="quick-action-card role-cashier role-owner" onclick="navigateTo('pos')">
+                        <span class="qa-icon">⊟</span><span class="qa-title">Open POS</span><span class="qa-sub">Start a new transaction</span>
+                    </button>
+                    <button class="quick-action-card" onclick="navigateTo('queue')">
+                        <span class="qa-icon">≡</span><span class="qa-title">Queue</span><span class="qa-sub">Manage customer queue</span>
+                    </button>
+                    <button class="quick-action-card role-cashier role-owner" onclick="navigateTo('customers')">
+                        <span class="qa-icon">◉</span><span class="qa-title">New Customer</span><span class="qa-sub">Add a customer</span>
+                    </button>
+                    <button class="quick-action-card role-cashier role-owner" onclick="navigateTo('appointments')">
+                        <span class="qa-icon">▦</span><span class="qa-title">Appointments</span><span class="qa-sub">Schedule a booking</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header"><span class="section-icon">◷</span><h2>Recent Transactions</h2></div>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead><tr><th>Transaction</th><th>Time</th><th>Customer</th><th>Payment</th><th>Status</th><th>Amount</th></tr></thead>
+                        <tbody id="recentTxnBody">
+                            <tr class="empty-row"><td colspan="6"><div class="empty-state"><span class="empty-icon">◷</span><span>No transactions yet</span></div></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════
+             ANALYTICS (Owner only)
+        ══════════════════════════════ -->
+        <div class="page" id="page-analytics">
+            <div class="section">
+                <div class="section-header"><span class="section-icon">↗</span><h2>Analytics</h2></div>
+                <div class="analytics-grid">
+                    <div class="analytics-card">
+                        <h4>Revenue Overview</h4>
+                        <div class="chart-placeholder">📊 Chart will appear here once connected to backend</div>
+                    </div>
+                    <div class="analytics-card">
+                        <h4>Top Services</h4>
+                        <div class="chart-placeholder">📈 Chart will appear here once connected to backend</div>
+                    </div>
+                    <div class="analytics-card wide">
+                        <h4>Monthly Bookings</h4>
+                        <div class="chart-placeholder">📉 Chart will appear here once connected to backend</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════
+             QUEUE
+        ══════════════════════════════ -->
+        <div class="page" id="page-queue">
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-icon">≡</span><h2>Queue</h2>
+                    <div class="header-actions">
+                        <select class="header-select" id="queueBranchFilter">
+                            <option value="">All Branches</option>
+                            <option value="1">Branch 1 — Tisa</option>
+                            <option value="2">Branch 2 — J Mall</option>
+                        </select>
+                        <button class="header-btn role-cashier role-owner" id="addQueueBtn">+ Add to Queue</button>
+                    </div>
+                </div>
+                <div class="queue-columns">
+                    <div class="queue-col">
+                        <div class="queue-col-label waiting">● Waiting</div>
+                        <div class="queue-col-body" id="queueWaiting">
+                            <div class="empty-col">No one waiting</div>
+                        </div>
+                    </div>
+                    <div class="queue-col">
+                        <div class="queue-col-label in-progress">● In Progress</div>
+                        <div class="queue-col-body" id="queueInProgress">
+                            <div class="empty-col">No active repairs</div>
+                        </div>
+                    </div>
+                    <div class="queue-col">
+                        <div class="queue-col-label done">● Done</div>
+                        <div class="queue-col-body" id="queueDone">
+                            <div class="empty-col">No completed repairs</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════
+             APPOINTMENTS
+        ══════════════════════════════ -->
+        <div class="page" id="page-appointments">
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-icon">▦</span><h2>Appointments</h2>
+                    <div class="header-actions">
+                        <input type="date" class="header-input" id="apptDateFilter">
+                        <select class="header-select" id="apptStatusFilter">
+                            <option value="">All Status</option>
+                            <option value="pending">Pending</option>
+                            <option value="confirmed">Confirmed</option>
+                            <option value="completed">Completed</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                        <button class="header-btn role-cashier role-owner" id="newApptBtn">+ New Appointment</button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead><tr><th>Reference</th><th>Customer</th><th>Service</th><th>Branch</th><th>Date & Time</th><th>Technician</th><th>Status</th><th class="role-cashier role-owner">Actions</th></tr></thead>
+                        <tbody id="apptBody">
+                            <tr class="empty-row"><td colspan="8"><div class="empty-state"><span class="empty-icon">▦</span><span>No appointments yet</span></div></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════
+             SALES
+        ══════════════════════════════ -->
+        <div class="page" id="page-sales">
+            <div class="stats-grid" style="margin-bottom:24px">
+                <div class="stat-card"><div class="stat-header"><div class="stat-icon">₱</div><span class="stat-label">TODAY</span></div><div class="stat-value">—</div><div class="stat-empty">No data</div></div>
+                <div class="stat-card"><div class="stat-header"><div class="stat-icon">₱</div><span class="stat-label">THIS WEEK</span></div><div class="stat-value">—</div><div class="stat-empty">No data</div></div>
+                <div class="stat-card"><div class="stat-header"><div class="stat-icon">₱</div><span class="stat-label">THIS MONTH</span></div><div class="stat-value">—</div><div class="stat-empty">No data</div></div>
+            </div>
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-icon">₱</span><h2>Sales History</h2>
+                    <div class="header-actions">
+                        <input type="date" class="header-input" id="salesDateFrom">
+                        <input type="date" class="header-input" id="salesDateTo">
+                        <button class="header-btn" id="salesFilterBtn">Filter</button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead><tr><th>Transaction</th><th>Customer</th><th>Payment</th><th>Date</th><th>Status</th><th>Amount</th></tr></thead>
+                        <tbody id="salesBody">
+                            <tr class="empty-row"><td colspan="6"><div class="empty-state"><span class="empty-icon">₱</span><span>No sales yet</span></div></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════
+             COMMISSIONS (Tech: own only)
+        ══════════════════════════════ -->
+        <div class="page" id="page-commissions">
+            <div class="section">
+                <div class="section-header"><span class="section-icon">◎</span><h2>Commissions</h2></div>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead><tr><th>Technician</th><th>Service</th><th>Date</th><th>Amount</th><th>Status</th></tr></thead>
+                        <tbody id="commissionsBody">
+                            <tr class="empty-row"><td colspan="5"><div class="empty-state"><span class="empty-icon">◎</span><span>No commissions yet</span></div></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════
+             BACK JOBS (Tech: own only)
+        ══════════════════════════════ -->
+        <div class="page" id="page-backjobs">
+            <div class="section">
+                <div class="section-header"><span class="section-icon">↺</span><h2>Back Jobs</h2></div>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead><tr><th>Reference</th><th>Customer</th><th>Device</th><th>Issue</th><th>Assigned To</th><th>Status</th></tr></thead>
+                        <tbody id="backJobsBody">
+                            <tr class="empty-row"><td colspan="6"><div class="empty-state"><span class="empty-icon">↺</span><span>No back jobs</span></div></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════
+             SERVICES (Owner only)
+        ══════════════════════════════ -->
+        <div class="page" id="page-services">
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-icon">✦</span><h2>Services</h2>
+                    <div class="header-actions">
+                        <input type="text" class="header-input" placeholder="Search services..." id="serviceSearchAdmin">
+                        <button class="header-btn" id="addServiceBtn">+ Add Service</button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead><tr><th>Service Name</th><th>Category</th><th>Duration</th><th>Price</th><th>Status</th><th>Actions</th></tr></thead>
+                        <tbody id="servicesBody">
+                            <tr class="empty-row"><td colspan="6"><div class="empty-state"><span class="empty-icon">✦</span><span>No services added yet</span></div></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════
+             CATEGORIES (Owner only)
+        ══════════════════════════════ -->
+        <div class="page" id="page-categories">
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-icon">⊟</span><h2>Categories</h2>
+                    <button class="header-btn" id="addCategoryBtn">+ Add Category</button>
+                </div>
+                <div class="categories-grid" id="categoriesGrid">
+                    <div class="empty-page"><span class="ep-icon">⊟</span><span class="ep-title">No categories yet</span><span class="ep-sub">Add your first category.</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════
+             SUPPLIES (Owner only)
+        ══════════════════════════════ -->
+        <div class="page" id="page-supplies">
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-icon">◈</span><h2>Supplies</h2>
+                    <button class="header-btn" id="addSupplyBtn">+ Add Supply</button>
+                </div>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead><tr><th>Item</th><th>Category</th><th>Stock</th><th>Unit</th><th>Status</th><th>Actions</th></tr></thead>
+                        <tbody id="suppliesBody">
+                            <tr class="empty-row"><td colspan="6"><div class="empty-state"><span class="empty-icon">◈</span><span>No supplies added yet</span></div></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════
+             STAFF (Owner only)
+        ══════════════════════════════ -->
+        <div class="page" id="page-staff">
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-icon">◉</span><h2>Staff</h2>
+                    <button class="header-btn" id="addStaffBtn">+ Add Staff</button>
+                </div>
+                <div class="staff-grid" id="staffGrid">
+                    <div class="empty-page"><span class="ep-icon">◉</span><span class="ep-title">No staff added yet</span><span class="ep-sub">Add your first staff member.</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════
+             CUSTOMERS
+        ══════════════════════════════ -->
+        <div class="page" id="page-customers">
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-icon">◍</span><h2>Customers</h2>
+                    <div class="header-actions">
+                        <input type="text" class="header-input" placeholder="Search customers..." id="customerSearch">
+                        <button class="header-btn role-cashier role-owner" id="addCustomerBtn">+ Add Customer</button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead><tr><th>Name</th><th>Phone</th><th>Email</th><th>Total Visits</th><th>Last Visit</th><th>Actions</th></tr></thead>
+                        <tbody id="customersBody">
+                            <tr class="empty-row"><td colspan="6"><div class="empty-state"><span class="empty-icon">◍</span><span>No customers yet</span></div></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════
+             LOYALTY (Owner only)
+        ══════════════════════════════ -->
+        <div class="page" id="page-loyalty">
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-icon">♦</span><h2>Loyalty Programs</h2>
+                    <button class="header-btn" id="addLoyaltyBtn">+ Create Program</button>
+                </div>
+                <div class="empty-page"><span class="ep-icon">♦</span><span class="ep-title">Loyalty Programs</span><span class="ep-sub">Create reward programs for your customers.</span></div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════
+             MY QUEUE (Technician)
+        ══════════════════════════════ -->
+        <div class="page" id="page-myqueue">
+            <div class="section">
+                <div class="section-header"><span class="section-icon">≡</span><h2>My Assigned Queue</h2></div>
+                <div class="queue-columns">
+                    <div class="queue-col">
+                        <div class="queue-col-label waiting">● Assigned to Me</div>
+                        <div class="queue-col-body" id="myQueueAssigned"><div class="empty-col">No assigned jobs</div></div>
+                    </div>
+                    <div class="queue-col">
+                        <div class="queue-col-label in-progress">● In Progress</div>
+                        <div class="queue-col-body" id="myQueueInProgress"><div class="empty-col">No active repairs</div></div>
+                    </div>
+                    <div class="queue-col">
+                        <div class="queue-col-label done">● Completed Today</div>
+                        <div class="queue-col-body" id="myQueueDone"><div class="empty-col">No completed repairs</div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- ══════════════════════════════
+         MODALS
+    ══════════════════════════════ -->
+
+    <!-- Add to Queue Modal -->
+    <div class="modal-overlay" id="queueModal">
+        <div class="modal">
+            <div class="modal-header"><h3>Add to Queue</h3><button class="modal-close" data-modal="queueModal">✕</button></div>
+            <div class="modal-body">
+                <div class="form-group"><label>Customer Name</label><input type="text" id="qCustomer" class="form-input" placeholder="Full name"></div>
+                <div class="form-group"><label>Phone</label><input type="text" id="qPhone" class="form-input" placeholder="+63 9XX XXX XXXX"></div>
+                <div class="form-group"><label>Device / Service</label><input type="text" id="qDevice" class="form-input" placeholder="e.g. iPhone 14 Battery"></div>
+                <div class="form-group"><label>Assign Technician</label>
+                    <select id="qTechnician" class="form-input">
+                        <option value="">— Random / Unassigned —</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>Branch</label>
+                    <select id="qBranch" class="form-input">
+                        <option value="1">Branch 1 — Tisa</option>
+                        <option value="2">Branch 2 — J Mall</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer"><button class="btn-cancel" data-modal="queueModal">Cancel</button><button class="btn-confirm" id="queueConfirmBtn">Add to Queue</button></div>
+        </div>
+    </div>
+
+    <!-- Add Staff Modal -->
+    <div class="modal-overlay" id="staffModal">
+        <div class="modal">
+            <div class="modal-header"><h3>Add Staff Member</h3><button class="modal-close" data-modal="staffModal">✕</button></div>
+            <div class="modal-body">
+                <div class="form-group"><label>Full Name</label><input type="text" id="staffName" class="form-input" placeholder="Full name"></div>
+                <div class="form-group"><label>Username</label><input type="text" id="staffUsername" class="form-input" placeholder="Login username"></div>
+                <div class="form-group"><label>Password</label><input type="password" id="staffPassword" class="form-input" placeholder="Set a password"></div>
+                <div class="form-group"><label>Role</label>
+                    <select id="staffRole" class="form-input">
+                        <option value="technician">Technician</option>
+                        <option value="cashier">Cashier</option>
+                        <option value="owner">Owner / Super Admin</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>Branch</label>
+                    <select id="staffBranch" class="form-input">
+                        <option value="1">Branch 1 — Tisa</option>
+                        <option value="2">Branch 2 — J Mall</option>
+                        <option value="both">Both Branches</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer"><button class="btn-cancel" data-modal="staffModal">Cancel</button><button class="btn-confirm" id="staffConfirmBtn">Add Staff</button></div>
+        </div>
+    </div>
+
+    <!-- Add Service Modal -->
+    <div class="modal-overlay" id="serviceModal">
+        <div class="modal">
+            <div class="modal-header"><h3 id="serviceModalTitle">Add Service</h3><button class="modal-close" data-modal="serviceModal">✕</button></div>
+            <div class="modal-body">
+                <div class="form-group"><label>Service Name</label><input type="text" id="svcName" class="form-input" placeholder="e.g. iPhone 15 Battery"></div>
+                <div class="form-group"><label>Category</label><input type="text" id="svcCategory" class="form-input" placeholder="e.g. Hardware, Software"></div>
+                <div class="form-group"><label>Duration (minutes)</label><input type="number" id="svcDuration" class="form-input" placeholder="60"></div>
+                <div class="form-group"><label>Price (₱)</label><input type="number" id="svcPrice" class="form-input" placeholder="0"></div>
+                <div class="form-group"><label>Description</label><textarea id="svcDesc" class="form-input form-textarea" placeholder="Optional description..."></textarea></div>
+            </div>
+            <div class="modal-footer"><button class="btn-cancel" data-modal="serviceModal">Cancel</button><button class="btn-confirm" id="serviceConfirmBtn">Save Service</button></div>
+        </div>
+    </div>
+
+    <!-- Add Customer Modal -->
+    <div class="modal-overlay" id="customerModal">
+        <div class="modal">
+            <div class="modal-header"><h3>Add Customer</h3><button class="modal-close" data-modal="customerModal">✕</button></div>
+            <div class="modal-body">
+                <div class="form-group"><label>Full Name</label><input type="text" id="custFullName" class="form-input" placeholder="Full name"></div>
+                <div class="form-group"><label>Phone</label><input type="text" id="custPhoneAdmin" class="form-input" placeholder="+63 9XX XXX XXXX"></div>
+                <div class="form-group"><label>Email</label><input type="email" id="custEmailAdmin" class="form-input" placeholder="email@example.com"></div>
+                <div class="form-group"><label>Special Request</label><textarea id="custRequest" class="form-input form-textarea" placeholder="Any notes..."></textarea></div>
+            </div>
+            <div class="modal-footer"><button class="btn-cancel" data-modal="customerModal">Cancel</button><button class="btn-confirm" id="customerConfirmBtn">Save Customer</button></div>
+        </div>
+    </div>
+
+    <!-- Assign Technician Modal (Cashier) -->
+    <div class="modal-overlay" id="assignModal">
+        <div class="modal">
+            <div class="modal-header"><h3>Assign Technician</h3><button class="modal-close" data-modal="assignModal">✕</button></div>
+            <div class="modal-body">
+                <p style="color:var(--text-2);margin-bottom:16px;font-size:14px;">Select a technician for this queue item.</p>
+                <div class="form-group"><label>Technician</label>
+                    <select id="assignTechSelect" class="form-input">
+                        <option value="">— Select Technician —</option>
+                    </select>
+                </div>
+                <input type="hidden" id="assignQueueId">
+            </div>
+            <div class="modal-footer"><button class="btn-cancel" data-modal="assignModal">Cancel</button><button class="btn-confirm" id="assignConfirmBtn">Assign</button></div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script type="module" src="dist/admin.js"></script>
+</body>
+</html>

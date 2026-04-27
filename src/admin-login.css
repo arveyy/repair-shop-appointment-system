@@ -27,7 +27,6 @@ html, body {
     color: var(--text-1);
 }
 
-/* ── CANVAS ── */
 #bgCanvas {
     position: fixed;
     top: 0; left: 0;
@@ -35,7 +34,6 @@ html, body {
     z-index: 0;
 }
 
-/* ── BG LOGO (ghost behind everything) ── */
 .bg-logo {
     position: fixed;
     top: 50%; left: 50%;
@@ -57,7 +55,6 @@ html, body {
     50%       { opacity: 0.07; transform: translate(-50%, -50%) scale(1.03); }
 }
 
-/* ── LOGIN WRAPPER ── */
 .login-wrapper {
     position: fixed;
     inset: 0;
@@ -68,7 +65,6 @@ html, body {
     padding: 20px;
 }
 
-/* ── GLASS CARD ── */
 .login-card {
     position: relative;
     width: 100%;
@@ -91,7 +87,6 @@ html, body {
     to   { opacity: 1; transform: translateY(0)   scale(1); }
 }
 
-/* Card glow ring */
 .card-glow {
     position: absolute;
     inset: -1px;
@@ -108,7 +103,6 @@ html, body {
     50%       { box-shadow: 0 0 40px rgba(0, 240, 255, 0.18), inset 0 0 30px rgba(0, 240, 255, 0.06); }
 }
 
-/* ── HEADER ── */
 .login-header {
     display: flex;
     flex-direction: column;

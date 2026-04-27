@@ -3,25 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Crimson+Text:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-
     <title>QueueTech — Admin Login</title>
     <link rel="stylesheet" href="admin-login.css">
 </head>
 <body>
 
-    <!-- Floating Background Logo -->
+    <canvas id="bgCanvas"></canvas>
+
     <div class="bg-logo">
         <img src="images/logo.png" class="bg-logo-img">
     </div>
 
-    <!-- Login -->
     <div class="login-wrapper">
         <div class="login-card">
-
             <div class="card-glow"></div>
-
             <div class="login-header">
                 <div class="login-logo-wrap">
                     <img src="images/logo.png" class="login-logo">
@@ -30,9 +26,7 @@
                 <h1 class="login-title">Tim'Solutions</h1>
                 <p class="login-sub">Admin Portal — Authorized Access Only</p>
             </div>
-
             <div class="login-form">
-
                 <div class="input-group">
                     <label class="input-label">Username</label>
                     <div class="input-wrap">
@@ -40,7 +34,6 @@
                         <input type="text" class="input-field" placeholder="Enter your username">
                     </div>
                 </div>
-
                 <div class="input-group">
                     <label class="input-label">Password</label>
                     <div class="input-wrap">
@@ -48,23 +41,23 @@
                         <input type="password" class="input-field" placeholder="Enter your password">
                     </div>
                 </div>
-
                 <div class="login-options">
                     <label class="remember-wrap">
                         <input type="checkbox" class="remember-check">
                         <span class="remember-label">Remember me</span>
                     </label>
                 </div>
-
-                <button class="login-btn">Sign In</button>
-
+                <button class="login-btn">
+                    <span class="btn-text">Sign In</span>
+                    <span class="btn-loader"></span>
+                </button>
                 <div class="login-footer">
                     <span class="footer-text">Forgot your credentials? Contact your administrator.</span>
                 </div>
-
             </div>
         </div>
     </div>
 
+    <script type="module" src="dist/admin-login.js"></script>
 </body>
 </html>
