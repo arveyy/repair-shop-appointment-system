@@ -105,8 +105,12 @@ function loadSession(): void {
 }
 
 function applyRole(role: Role): void {
-    document.body.classList.remove('role-owner', 'role-cashier', 'role-technician');
+    document.body.classList.remove(
+        'role-owner', 'role-cashier', 'role-technician',
+        'is-owner', 'is-cashier', 'is-technician'
+    );
     document.body.classList.add(`role-${role}`);
+    document.body.classList.add(`is-${role}`);
 }
 
 // ── SIDEBAR RENDER ──
@@ -676,13 +680,26 @@ function initModals(): void {
 
         if (!techId) { showToast('Select a technician.', 'error'); return; }
 
-        const res = await apiFetch(`/admin/queue/${queueId}/assign`, {
+    // Assign to queue
+        const queueRes = await apiFetch(`/admin/queue/${queueId}/assign`, {
             method: 'POST',
             body: JSON.stringify({ technician_id: techId }),
         });
 
-        if (res) { showToast('Technician assigned!', 'success'); closeModal('assignModal'); loadQueue(); loadAppointments(); }
-        else showToast('Failed to assign.', 'error');
+    // Also assign to appointment if it exists
+        await apiFetch(`/admin/appointments/${queueId}/assign`, {
+            method: 'POST',
+            body: JSON.stringify({ technician_id: techId }),
+        });
+
+        if (queueRes) {
+            showToast('Technician assigned!', 'success');
+            closeModal('assignModal');
+            loadQueue();
+            loadAppointments();
+        } else {
+            showToast('Failed to assign.', 'error');
+        }
     });
 }
 

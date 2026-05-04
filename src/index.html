@@ -11,56 +11,34 @@
     <nav class="navbar">
         <div class="navbar-container">
             <div class="navbar-logo">
-            <a href="#">
-                <img src="images/logo.png" alt="QueueTech Logo" class="navbar-logo-img">
-            </a>
+                <a href="#">
+                    <img src="images/logo.png" alt="QueueTech Logo" class="navbar-logo-img">
+                </a>
             </div>
-
             <ul class="navbar-menu">
                 <li><a href="#">Home</a></li>
                 <li><a href="#">How It Works</a></li>
-                <li><a href="#">Book Appointment</a></li>
-                <li><a href="#">Track Repair</a></li>
+                <li><a href="#" id="navBookBtn">Book Appointment</a></li>
+                <li><a href="#track">Track Repair</a></li>
             </ul>
-        </div> 
+        </div>
     </nav>
-    
+
     <div class="hero-section">
         <h1>Track Repair Now</h1>
 
         <div class="carousel-container">
             <div class="carousel-track">
-                <div class="carousel-slide">
-                    <img src="images/feedback1.jpg" alt="Feedback 1">
-                </div>
-                <div class="carousel-slide">
-                    <img src="images/feedback2.jpg" alt="Feedback 2">
-                </div>
-                <div class="carousel-slide">
-                    <img src="images/feedback3.jpg" alt="Feedback 3">
-                </div>
-                <div class="carousel-slide">
-                    <img src="images/feedback4.jpg" alt="Feedback 4">
-                </div>
-                <div class="carousel-slide">
-                    <img src="images/feedback5.jpg" alt="Feedback 5">
-                </div>
-
-                <div class="carousel-slide">
-                    <img src="images/feedback1.jpg" alt="Feedback 1">
-                </div>
-                <div class="carousel-slide">
-                    <img src="images/feedback2.jpg" alt="Feedback 2">
-                </div>
-                <div class="carousel-slide">
-                    <img src="images/feedback3.jpg" alt="Feedback 3">
-                </div>
-                <div class="carousel-slide">
-                    <img src="images/feedback4.jpg" alt="Feedback 4">
-                </div>
-                <div class="carousel-slide">
-                    <img src="images/feedback5.jpg" alt="Feedback 5">
-                </div>
+                <div class="carousel-slide"><img src="images/feedback1.jpg" alt="Feedback 1"></div>
+                <div class="carousel-slide"><img src="images/feedback2.jpg" alt="Feedback 2"></div>
+                <div class="carousel-slide"><img src="images/feedback3.jpg" alt="Feedback 3"></div>
+                <div class="carousel-slide"><img src="images/feedback4.jpg" alt="Feedback 4"></div>
+                <div class="carousel-slide"><img src="images/feedback5.jpg" alt="Feedback 5"></div>
+                <div class="carousel-slide"><img src="images/feedback1.jpg" alt="Feedback 1"></div>
+                <div class="carousel-slide"><img src="images/feedback2.jpg" alt="Feedback 2"></div>
+                <div class="carousel-slide"><img src="images/feedback3.jpg" alt="Feedback 3"></div>
+                <div class="carousel-slide"><img src="images/feedback4.jpg" alt="Feedback 4"></div>
+                <div class="carousel-slide"><img src="images/feedback5.jpg" alt="Feedback 5"></div>
             </div>
         </div>
 
@@ -96,37 +74,206 @@
                 <p>Select and click your nearest branch, pick a time, describe the issue, and join the queue — it takes less than 2 minutes.</p>
             </div>
             <div class="drop-off-images">
-                <a href="services.html?branch=1" class="branch-card">
-                    <img src="images/tisalocation.png" alt="Branch 1">
-                    <div class="branch-info">
-                        <span class="branch-label">Branch 1</span>
-                        <p class="branch-address">127 Francisco Llamas St, Cebu City, 6000 Cebu</p>
-                    </div>
-                </a>
-                <a href="services.html?branch=2" class="branch-card">
-                    <img src="images/jmallbranch.jpg" alt="Branch 2">
-                    <div class="branch-info">
-                        <span class="branch-label">Branch 2</span>
-                        <p class="branch-address">3rd Floor Cyber Zone BSD International, SM J Mall, A. S. Fortuna St, Mandaue, 6014 Cebu</p>
-                    </div>
-                </a>
+                    <a href="#" class="branch-card" data-branch="1" data-branch-name="Tisa Location">
+                        <img src="images/tisalocation.png" alt="Branch 1">
+                        <div class="branch-info">
+                            <span class="branch-label">Branch 1</span>
+                            <p class="branch-address">127 Francisco Llamas St, Cebu City, 6000 Cebu</p>
+                        </div>
+                    </a>
+                    <a href="#" class="branch-card" data-branch="2" data-branch-name="SM J Mall">
+                        <img src="images/jmallbranch.jpg" alt="Branch 2">
+                        <div class="branch-info">
+                            <span class="branch-label">Branch 2</span>
+                            <p class="branch-address">3rd Floor Cyber Zone BSD International, SM J Mall, A. S. Fortuna St, Mandaue, 6014 Cebu</p>
+                        </div>
+                    </a>
+                </div>
             </div>
-        </div>
-        
-        <div class="track-repair">
+
+        <div class="track-repair" id="track">
             <h2>Track Your Repair</h2>
             <p class="track-subtitle">Enter your receipt or reference number to check the status of your repair in real time.</p>
             <div class="track-input-container">
                 <img src="images/trackpickupicon.png" alt="Track and Pickup" class="track-icon-img">
-                <input type="text" class="track-input" placeholder="Enter your receipt or reference number">
-                <button class="track-btn">Track Now</button>
+                <input type="text" id="trackInput" class="track-input" placeholder="Enter your receipt or reference number">
+                <button class="track-btn" id="trackBtn">Track Now</button>
             </div>
             <p class="track-hint">You can find your receipt number on the confirmation sent to your phone or email.</p>
+            <div class="track-result" id="trackResult"></div>
         </div>
-
     </div>
 
-<script src="dist/script.js"></script>
+    <!-- ══════════════════════════════
+         BOOKING MODAL
+    ══════════════════════════════ -->
+    <div class="booking-overlay" id="bookingOverlay">
+        <div class="booking-glass">
 
+            <button class="booking-close" id="bookingClose">&times;</button>
+
+            <!-- Progress -->
+            <div class="bk-progress">
+                <div class="bk-step active" data-step="1">
+                    <div class="bk-step-circle">1</div>
+                    <span class="bk-step-label">Services</span>
+                </div>
+                <div class="bk-line"></div>
+                <div class="bk-step" data-step="2">
+                    <div class="bk-step-circle">2</div>
+                    <span class="bk-step-label">Date & Time</span>
+                </div>
+                <div class="bk-line"></div>
+                <div class="bk-step" data-step="3">
+                    <div class="bk-step-circle">3</div>
+                    <span class="bk-step-label">Your Details</span>
+                </div>
+            </div>
+
+            <!-- STEP 1: SERVICES -->
+            <div class="bk-page active" id="bk-step-1">
+                <div class="bk-step-header">
+                    <h2 class="bk-title">Select Services</h2>
+                    <p class="bk-sub">Booking at <strong id="bkBranchName">—</strong></p>
+                </div>
+                <div class="bk-services-layout">
+                    <div class="bk-services-panel">
+                        <div class="bk-search-wrap">
+                            <input type="text" id="bkServiceSearch" class="bk-search" placeholder="Search services...">
+                        </div>
+                        <div class="bk-services-list" id="bkServicesList"></div>
+                        <div class="bk-custom-toggle" id="bkCustomToggle">
+                            + Can't find your service? Request a custom one
+                        </div>
+                        <div class="bk-custom-form" id="bkCustomForm">
+                            <input type="text" id="bkCustomName" class="bk-input" placeholder="Service name *">
+                            <textarea id="bkCustomDesc" class="bk-input bk-textarea" placeholder="Description (optional)"></textarea>
+                            <button class="bk-btn-secondary" id="bkAddCustom">+ Add Custom Service</button>
+                        </div>
+                    </div>
+                    <div class="bk-selected-panel">
+                        <div class="bk-selected-header">
+                            <h3>Selected</h3>
+                            <span class="bk-sel-count" id="bkSelectedCount">0</span>
+                        </div>
+                        <div class="bk-selected-list" id="bkSelectedList">
+                            <div class="bk-empty-sel">No services selected yet.</div>
+                        </div>
+                        <div class="bk-selected-footer">
+                            <div class="bk-total-row">
+                                <span>Total</span>
+                                <span class="bk-total-amt" id="bkTotal">&#8369;0</span>
+                            </div>
+                            <button class="bk-btn-primary" id="bkStep1Next" disabled>Continue &#8594;</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 2: DATE & TIME -->
+            <div class="bk-page" id="bk-step-2">
+                <div class="bk-step-header">
+                    <h2 class="bk-title">Pick a Date & Time</h2>
+                    <p class="bk-sub">Choose your preferred appointment schedule.</p>
+                </div>
+                <div class="bk-datetime-layout">
+                    <div class="bk-calendar-panel">
+                        <div class="bk-cal-header">
+                            <button class="bk-cal-nav" id="bkCalPrev">&#8249;</button>
+                            <span id="bkCalLabel"></span>
+                            <button class="bk-cal-nav" id="bkCalNext">&#8250;</button>
+                        </div>
+                        <div class="bk-cal-weekdays">
+                            <span>Sun</span><span>Mon</span><span>Tue</span>
+                            <span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+                        </div>
+                        <div class="bk-cal-grid" id="bkCalGrid"></div>
+                    </div>
+                    <div class="bk-slots-panel">
+                        <h3>Available Time Slots</h3>
+                        <p class="bk-slots-sub" id="bkSlotsSub">Select a date first</p>
+                        <div class="bk-slots-grid" id="bkSlotsGrid"></div>
+                        <button class="bk-btn-primary" id="bkStep2Next" disabled>Continue &#8594;</button>
+                    </div>
+                </div>
+                <button class="bk-back" id="bkBack2">&#8592; Back</button>
+            </div>
+
+            <!-- STEP 3: CUSTOMER DETAILS -->
+            <div class="bk-page" id="bk-step-3">
+                <div class="bk-step-header">
+                    <h2 class="bk-title">Your Details</h2>
+                    <p class="bk-sub">Almost done! Fill in your information to confirm.</p>
+                </div>
+                <div class="bk-details-layout">
+                    <div class="bk-summary">
+                        <h4>Booking Summary</h4>
+                        <div class="bk-summary-row"><span>Branch</span><strong id="sumBranch">—</strong></div>
+                        <div class="bk-summary-row"><span>Date</span><strong id="sumDate">—</strong></div>
+                        <div class="bk-summary-row"><span>Time</span><strong id="sumTime">—</strong></div>
+                        <div class="bk-summary-divider"></div>
+                        <div id="sumServices"></div>
+                        <div class="bk-summary-divider"></div>
+                        <div class="bk-summary-row bk-summary-total">
+                            <span>Total</span>
+                            <strong id="sumTotal">&#8369;0</strong>
+                        </div>
+                    </div>
+                    <div class="bk-form">
+                        <div class="bk-form-section">
+                            <h4>Contact Information</h4>
+                            <div class="bk-field">
+                                <label>Full Name *</label>
+                                <input type="text" id="bkName" class="bk-input" placeholder="Juan dela Cruz">
+                            </div>
+                            <div class="bk-field">
+                                <label>Phone Number *</label>
+                                <input type="tel" id="bkPhone" class="bk-input" placeholder="+63 9XX XXX XXXX">
+                            </div>
+                            <div class="bk-field">
+                                <label>Email Address *</label>
+                                <input type="email" id="bkEmail" class="bk-input" placeholder="you@email.com">
+                            </div>
+                        </div>
+                        <div class="bk-form-section">
+                            <h4>Social Media <span class="bk-optional">(Optional)</span></h4>
+                            <div class="bk-socials-grid">
+                                <div class="bk-field"><label>Facebook</label><input type="text" id="bkFb" class="bk-input" placeholder="facebook.com/username"></div>
+                                <div class="bk-field"><label>Instagram</label><input type="text" id="bkIg" class="bk-input" placeholder="@username"></div>
+                                <div class="bk-field"><label>TikTok</label><input type="text" id="bkTt" class="bk-input" placeholder="@username"></div>
+                                <div class="bk-field"><label>Twitter/X</label><input type="text" id="bkTw" class="bk-input" placeholder="@username"></div>
+                                <div class="bk-field"><label>Viber</label><input type="text" id="bkVb" class="bk-input" placeholder="+63 9XX XXX XXXX"></div>
+                                <div class="bk-field"><label>WhatsApp</label><input type="text" id="bkWa" class="bk-input" placeholder="+63 9XX XXX XXXX"></div>
+                                <div class="bk-field bk-full"><label>Others</label><input type="text" id="bkOther" class="bk-input" placeholder="Other contact info"></div>
+                            </div>
+                        </div>
+                        <div class="bk-form-section">
+                            <h4>Special Request <span class="bk-optional">(Optional)</span></h4>
+                            <textarea id="bkSpecial" class="bk-input bk-textarea" placeholder="Any special instructions..."></textarea>
+                        </div>
+                        <div class="bk-error" id="bkError"></div>
+                        <button class="bk-btn-confirm" id="bkConfirm">Confirm Booking</button>
+                    </div>
+                </div>
+                <button class="bk-back" id="bkBack3">&#8592; Back</button>
+            </div>
+
+            <!-- SUCCESS -->
+            <div class="bk-page" id="bk-step-success">
+                <div class="bk-success">
+                    <div class="bk-success-icon">&#10003;</div>
+                    <h2>Booking Confirmed!</h2>
+                    <p>Your appointment has been successfully booked.</p>
+                    <div class="bk-ref-box">Reference No: <strong id="bkRefNum">#—</strong></div>
+                    <div class="bk-success-details" id="bkSuccessDetails"></div>
+                    <p class="bk-success-note">A confirmation will be sent to your email and phone number.</p>
+                    <button class="bk-btn-primary" id="bkDone">Done</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script type="module" src="dist/script.js"></script>
 </body>
 </html>

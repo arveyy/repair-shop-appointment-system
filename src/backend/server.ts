@@ -465,6 +465,69 @@ app.get('/api/admin/backjobs', authMiddleware, async (req, res) => {
     } catch { res.status(500).json({ error: 'Failed to load back jobs.' }); }
 });
 
+// POST /api/admin/appointments/:id/assign
+app.post('/api/admin/appointments/:id/assign', authMiddleware, requireRole('owner', 'cashier'), async (req, res) => {
+    const { id } = req.params;
+    const { technician_id } = req.body;
+    const conn = await pool.getConnection();
+    try {
+        await conn.beginTransaction();
+
+        // Update booking technician
+        await conn.query('UPDATE bookings SET technician_id = ? WHERE id = ?', [technician_id, id]);
+
+        // Get booking details
+        const [[booking]] = await conn.query<any[]>(
+            `SELECT b.*, c.full_name as customer_name,
+             GROUP_CONCAT(svc.service_name SEPARATOR ', ') as service_names
+             FROM bookings b
+             JOIN customers c ON b.customer_id = c.id
+             LEFT JOIN booking_services bs ON b.id = bs.booking_id
+             LEFT JOIN services svc ON bs.service_id = svc.id
+             WHERE b.id = ? GROUP BY b.id`, [id]
+        );
+
+        if (booking) {
+            // Check if queue entry already exists for this booking
+            const [existing] = await conn.query<any[]>(
+                'SELECT id FROM queue WHERE booking_id = ?', [id]
+            );
+
+            if (existing.length === 0) {
+                // Get next queue number
+                const [[numRow]] = await conn.query<any[]>(
+                    `SELECT COALESCE(MAX(queue_number),0)+1 as next_num 
+                     FROM queue WHERE DATE(created_at) = CURDATE() AND branch_id = ?`,
+                    [booking.branch_id]
+                );
+
+                await conn.query(
+                    `INSERT INTO queue 
+                    (customer_id, service, technician_id, branch_id, queue_number, status, booking_id)
+                    VALUES (?, ?, ?, ?, ?, 'waiting', ?)`,
+                    [booking.customer_id, booking.service_names || 'Repair Service',
+                    technician_id, booking.branch_id, numRow.next_num, id]
+                );
+            } else {
+                // Update existing queue entry
+                await conn.query(
+                    'UPDATE queue SET technician_id = ? WHERE booking_id = ?',
+                    [technician_id, id]
+                );
+            }
+        }
+
+        await conn.commit();
+        res.json({ success: true });
+    } catch (err) {
+        await conn.rollback();
+        console.error(err);
+        res.status(500).json({ error: 'Failed to assign.' });
+    } finally {
+        conn.release();
+    }
+});
+
 // ══════════════════════════════════════════
 //  START SERVER
 // ══════════════════════════════════════════
