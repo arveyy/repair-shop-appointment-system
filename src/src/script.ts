@@ -110,8 +110,9 @@ document.addEventListener('keydown', (e: KeyboardEvent): void => {
 document.querySelectorAll<HTMLElement>('.branch-card').forEach(card => {
     card.addEventListener('click', (e: Event): void => {
         e.preventDefault();
-        const branchId = Number(card.dataset.branch);
-        const branchName = card.dataset.branchName || `Branch ${branchId}`;
+        e.stopPropagation();
+        const branchId = Number(card.getAttribute('data-branch'));
+        const branchName = card.getAttribute('data-branch-name') || `Branch ${branchId}`;
         openBookingModal(branchId, branchName);
     });
 });
@@ -469,21 +470,21 @@ document.getElementById('bkConfirm')?.addEventListener('click', async () => {
     btn.disabled = true;
 
     const payload = {
-        branch_id: state.branchId,
+        branch_id: Number(state.branchId),
         appointment_date: state.date,
         appointment_time: state.time,
         customer: {
             full_name: name,
             phone,
             email,
-            social_facebook: getVal('bkFb'),
-            social_instagram: getVal('bkIg'),
-            social_tiktok: getVal('bkTt'),
-            social_twitter: getVal('bkTw'),
-            social_viber: getVal('bkVb'),
-            social_whatsapp: getVal('bkWa'),
-            social_others: getVal('bkOther'),
-            special_request: getVal('bkSpecial'),
+            social_facebook: getVal('bkFb') || null,
+            social_instagram: getVal('bkIg') || null,
+            social_tiktok: getVal('bkTt') || null,
+            social_twitter: getVal('bkTw') || null,
+            social_viber: getVal('bkVb') || null,
+            social_whatsapp: getVal('bkWa') || null,
+            social_others: getVal('bkOther') || null,
+            special_request: getVal('bkSpecial') || null,
         },
         services: state.selectedServices.map(s => ({
             service_id: s.isCustom ? null : s.id,
@@ -494,6 +495,8 @@ document.getElementById('bkConfirm')?.addEventListener('click', async () => {
             custom_desc: s.isCustom ? s.customDesc : null,
         })),
     };
+
+console.log('Sending payload:', JSON.stringify(payload));
 
     try {
         const res = await fetch(`${API}/bookings`, {
@@ -662,3 +665,5 @@ const FALLBACK_SERVICES: Service[] = [
     { id: 41, service_name: 'Xiaomi Poco F5 Battery',               duration: 60,  price: 1850 },
     { id: 42, service_name: 'ZTE Nubia V60 LCD',                    duration: 60,  price: 1500 },
 ];
+
+(window as any).openModal = openBookingModal;
